@@ -1,0 +1,284 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+
+  <div class="layout-container">
+    
+    <!-- Top Navbar -->
+    {% include 'base/navbar.html' %}
+
+    <!-- Layout Body Wrapper -->
+    <div class="layout-body">
+      
+      <!-- Left Sidebar Navigation -->
+      {% include 'base/sidebar.html' %}
+
+      <!-- Main Dashboard Panel Content -->
+      <main class="main-content">
+        <!-- Content Header -->
+        <div class="content-header">
+          <div>
+            <h1> {{ dashboard_title|default:"Dashboard Overview" }}</h1>
+            <p id="currentDate">Saturday, June 6, 2026</p>
+          </div>
+        </div>
+
+        <!-- KPI Cards Grid -->
+        <div class="kpi-grid">
+          <!-- Card 1: Total Vendors -->
+          <div class="kpi-card">
+            <div class="kpi-card-header">
+              <span class="kpi-title">Total Vendors</span>
+              <div class="kpi-icon-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+              </div>
+            </div>
+            <span class="kpi-value" id="kpiVendors">142</span>
+            <div class="kpi-trend trend-positive">
+              <span class="trend-badge">+12.4%</span>
+              <span>vs last month</span>
+            </div>
+          </div>
+
+          <!-- Card 2: Active RFQs -->
+          <div class="kpi-card">
+            <div class="kpi-card-header">
+              <span class="kpi-title">Active RFQs</span>
+              <div class="kpi-icon-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+              </div>
+            </div>
+            <span class="kpi-value" id="kpiRfqs">28</span>
+            <div class="kpi-trend trend-positive">
+              <span class="trend-badge">+3 new</span>
+              <span>received today</span>
+            </div>
+          </div>
+
+          <!-- Card 3: Pending Approvals -->
+          <div class="kpi-card">
+            <div class="kpi-card-header">
+              <span class="kpi-title">Pending Approvals</span>
+              <div class="kpi-icon-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              </div>
+            </div>
+            <span class="kpi-value" id="kpiApprovals">9</span>
+            <div class="kpi-trend trend-negative">
+              <span class="trend-badge">-15.3%</span>
+              <span>vs last week</span>
+            </div>
+          </div>
+
+          <!-- Card 4: Total Purchase Orders -->
+          <div class="kpi-card">
+            <div class="kpi-card-header">
+              <span class="kpi-title">Total POs</span>
+              <div class="kpi-icon-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+              </div>
+            </div>
+            <span class="kpi-value" id="kpiPos">1,248</span>
+            <div class="kpi-trend trend-positive">
+              <span class="trend-badge">+24.1%</span>
+              <span>QonQ quarterly spend</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dashboard Widgets Section -->
+        <div class="dashboard-sections-grid">
+          
+          <!-- Column Left (Charts / Analytics Overview) -->
+          <div class="section-col">
+            <div class="card-widget">
+              <div class="card-widget-header">
+                <span class="card-widget-title">Procurement & Spendings Overview</span>
+              </div>
+              <div class="card-widget-body">
+                <div class="charts-grid">
+                  
+                  <!-- Chart 1: Spends Overview Line Graph -->
+                  <div class="chart-container" id="spendChartContainer">
+                    <svg class="chart-svg" id="spendOverviewChart" viewBox="0 0 350 200">
+                      <!-- Grid lines -->
+                      <line x1="30" y1="150" x2="330" y2="150" class="chart-axis-line" />
+                      <line x1="30" y1="110" x2="330" y2="110" class="chart-grid-line" />
+                      <line x1="30" y1="70" x2="330" y2="70" class="chart-grid-line" />
+                      <line x1="30" y1="30" x2="330" y2="30" class="chart-grid-line" />
+                      
+                      <!-- Line graph path -->
+                      <path d="M 40 130 L 100 95 L 160 115 L 220 60 L 280 85 L 320 40" fill="none" stroke="var(--primary)" stroke-width="3" class="chart-line" />
+                      
+                      <!-- Interactive Points -->
+                      <circle cx="40" cy="130" r="5" fill="#FFFFFF" stroke="var(--primary)" stroke-width="2.5" class="chart-point" data-val="$24k" data-label="Jan" />
+                      <circle cx="100" cy="95" r="5" fill="#FFFFFF" stroke="var(--primary)" stroke-width="2.5" class="chart-point" data-val="$38k" data-label="Feb" />
+                      <circle cx="160" cy="115" r="5" fill="#FFFFFF" stroke="var(--primary)" stroke-width="2.5" class="chart-point" data-val="$31k" data-label="Mar" />
+                      <circle cx="220" cy="60" r="5" fill="#FFFFFF" stroke="var(--primary)" stroke-width="2.5" class="chart-point" data-val="$52k" data-label="Apr" />
+                      <circle cx="280" cy="85" r="5" fill="#FFFFFF" stroke="var(--primary)" stroke-width="2.5" class="chart-point" data-val="$44k" data-label="May" />
+                      <circle cx="320" cy="40" r="5" fill="#FFFFFF" stroke="var(--primary)" stroke-width="2.5" class="chart-point" data-val="$65k" data-label="Jun" />
+                      
+                      <!-- X Axis Labels -->
+                      <text x="40" y="170" class="chart-label" text-anchor="middle">Jan</text>
+                      <text x="100" y="170" class="chart-label" text-anchor="middle">Feb</text>
+                      <text x="160" y="170" class="chart-label" text-anchor="middle">Mar</text>
+                      <text x="220" y="170" class="chart-label" text-anchor="middle">Apr</text>
+                      <text x="280" y="170" class="chart-label" text-anchor="middle">May</text>
+                      <text x="320" y="170" class="chart-label" text-anchor="middle">Jun</text>
+                    </svg>
+                    <!-- Tooltip Box -->
+                    <div class="chart-tooltip" id="spendTooltip"></div>
+                  </div>
+
+                  <!-- Chart 2: Vendor Lead-Time Bar Chart -->
+                  <div class="chart-container" id="performanceChartContainer">
+                    <svg class="chart-svg" id="vendorPerformanceChart" viewBox="0 0 350 200">
+                      <line x1="30" y1="150" x2="330" y2="150" class="chart-axis-line" />
+                      
+                      <!-- Grid lines -->
+                      <line x1="30" y1="110" x2="330" y2="110" class="chart-grid-line" />
+                      <line x1="30" y1="70" x2="330" y2="70" class="chart-grid-line" />
+                      <line x1="30" y1="30" x2="330" y2="30" class="chart-grid-line" />
+
+                      <!-- Columns Bars -->
+                      <!-- Acme Corp -->
+                      <rect x="55" y="60" width="28" height="90" rx="3" fill="#0F6E56" class="chart-bar" data-val="92%" data-label="Acme Corp" />
+                      
+                      <!-- Globex -->
+                      <rect x="125" y="85" width="28" height="65" rx="3" fill="#0EA5E9" class="chart-bar" data-val="78%" data-label="Globex Ltd" />
+
+                      <!-- Stark Ind -->
+                      <rect x="195" y="45" width="28" height="105" rx="3" fill="#A855F7" class="chart-bar" data-val="96%" data-label="Stark Ind" />
+
+                      <!-- Initech -->
+                      <rect x="265" y="100" width="28" height="50" rx="3" fill="#F59E0B" class="chart-bar" data-val="65%" data-label="Initech LLC" />
+                      
+                      <!-- X Axis Labels -->
+                      <text x="69" y="170" class="chart-label" text-anchor="middle">Acme</text>
+                      <text x="139" y="170" class="chart-label" text-anchor="middle">Globex</text>
+                      <text x="209" y="170" class="chart-label" text-anchor="middle">Stark</text>
+                      <text x="279" y="170" class="chart-label" text-anchor="middle">Initech</text>
+                    </svg>
+                    <!-- Tooltip Box -->
+                    <div class="chart-tooltip" id="performanceTooltip"></div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Column Right (Activities & Quick Actions) -->
+          <div class="section-col">
+            <!-- Recent Activities Widget -->
+            <div class="card-widget">
+              <div class="card-widget-header">
+                <span class="card-widget-title">Recent Activity Logs</span>
+              </div>
+              <div class="card-widget-body">
+                <div class="activity-stream">
+                  <!-- Item 1: RFQ -->
+                  <div class="activity-item">
+                    <div class="activity-dot"></div>
+                    <span class="activity-text">RFQ <strong>RFQ-2026-089</strong> sent successfully to 5 qualified vendors.</span>
+                    <span class="activity-time">2 hours ago</span>
+                  </div>
+
+                  <!-- Item 2: Vendor -->
+                  <div class="activity-item">
+                    <div class="activity-dot"></div>
+                    <span class="activity-text">New enterprise vendor profile <strong>Initech LLC</strong> created.</span>
+                    <span class="activity-time">1 day ago</span>
+                  </div>
+
+                  <!-- Item 3: Quotation -->
+                  <div class="activity-item">
+                    <div class="activity-dot"></div>
+                    <span class="activity-text">Vendor <strong>Globex Ltd</strong> submitted a quotation response for RFQ-088.</span>
+                    <span class="activity-time">1.5 days ago</span>
+                  </div>
+
+                  <!-- Item 4: Invoice -->
+                  <div class="activity-item">
+                    <div class="activity-dot"></div>
+                    <span class="activity-text">Billing invoice <strong>INV-2026-042</strong> generated for PO-2026-003.</span>
+                    <span class="activity-time">2 days ago</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Actions Widget -->
+            <div class="card-widget">
+              <div class="card-widget-header">
+                <span class="card-widget-title">Quick Actions</span>
+              </div>
+              <div class="card-widget-body">
+                <div class="actions-grid">
+                  <!-- Action 1: Add Vendor -->
+                  <div class="btn-action-card" id="actionAddVendor">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="8.5" cy="7" r="4"></circle>
+                      <line x1="20" y1="8" x2="20" y2="14"></line>
+                      <line x1="23" y1="11" x2="17" y2="11"></line>
+                    </svg>
+                    <span>Add Vendor</span>
+                  </div>
+
+                  <!-- Action 2: Create RFQ -->
+                  <div class="btn-action-card" id="actionCreateRfq">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                      <line x1="12" y1="18" x2="12" y2="12"></line>
+                      <line x1="9" y1="15" x2="15" y2="15"></line>
+                    </svg>
+                    <span>Create RFQ</span>
+                  </div>
+
+                  <!-- Action 3: Compare Quotations -->
+                  <div class="btn-action-card" id="actionCompareQuotes">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="20" x2="18" y2="10"></line>
+                      <line x1="12" y1="20" x2="12" y2="4"></line>
+                      <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    <span>Compare Quotes</span>
+                  </div>
+
+                  <!-- Action 4: Generate Invoice -->
+                  <div class="btn-action-card" id="actionGenInvoice">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                      <line x1="1" y1="10" x2="23" y2="10"></line>
+                      <line x1="8" y1="15" x2="16" y2="15"></line>
+                    </svg>
+                    <span>Gen Invoice</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </main>
+
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block js %}
+{% endblock %}

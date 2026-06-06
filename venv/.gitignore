@@ -1,0 +1,50 @@
+# Created by venv; see https://docs.python.org/3/library/venv.html
+*# ==========================================
+# 1. Virtual Environments
+# ==========================================
+venv/
+.venv/
+env/
+ENV/
+pyvenv.cfg
+
+# ==========================================
+# 2. Database Files
+# ==========================================
+*.sqlite3
+*.db
+*.sqlite
+*.mdb
+*.ldf
+*.mdf
+
+# ==========================================
+# 3. Cache Files
+# ==========================================
+.cache/
+*.cache
+.sass-cache/
+.eslintcache
+.npm/
+
+# ==========================================
+# 4. Compiled Files
+# ==========================================
+# Python compiled files
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Java/C/C++ compiled files
+*.class
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+
+# Build directories
+dist/
+build/
+out/

@@ -1,0 +1,287 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}
+Vendor Management
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/vendors.css' %}">
+{% endblock %}
+
+{% block content %}
+
+  <div class="layout-container">
+    
+    <!-- Top Navbar -->
+    {% include 'base/navbar.html' %}
+
+    <!-- Layout Body Wrapper -->
+    <div class="layout-body">
+      
+      <!-- Left Sidebar Navigation -->
+      {% include 'base/sidebar.html' %}
+
+      <!-- Main Panel content -->
+      <main class="main-content">
+        
+        <!-- Header Section -->
+        <div class="content-header">
+          <div>
+            <h1>Vendor Management</h1>
+            <p>Manage and monitor all registered enterprise suppliers</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-secondary" id="exportVendorsBtn">
+              <!-- Export icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span>Export CSV</span>
+            </button>
+            <button class="btn btn-primary" id="addVendorBtn">
+              <!-- Add Icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              <span>Add Vendor</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Vendor Statistics Cards -->
+        <div class="stats-grid">
+          <!-- Stat 1 -->
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-title">Total Vendors</span>
+              <div class="stat-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+              </div>
+            </div>
+            <span class="stat-value" id="statTotal">5</span>
+            <div class="stat-trend">Total registered organizations</div>
+          </div>
+
+          <!-- Stat 2 -->
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-title">Active Vendors</span>
+              <div class="stat-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div>
+            </div>
+            <span class="stat-value" id="statActive">3</span>
+            <div class="stat-trend"><strong>60%</strong> of active vendors</div>
+          </div>
+
+          <!-- Stat 3 -->
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-title">Pending Verification</span>
+              <div class="stat-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              </div>
+            </div>
+            <span class="stat-value" id="statPending">1</span>
+            <div class="stat-trend">Requires compliance checks</div>
+          </div>
+
+          <!-- Stat 4 -->
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-title">Top Rated Vendors</span>
+              <div class="stat-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </div>
+            </div>
+            <span class="stat-value" id="statTopRated">2</span>
+            <div class="stat-trend">4.5+ average star rating</div>
+          </div>
+        </div>
+
+        <!-- Search & Filter Controls -->
+        <div class="filters-bar">
+          <div class="search-field">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="searchVendor" placeholder="Search by Vendor ID, Name, Company, Email...">
+          </div>
+
+          <div class="filter-controls">
+            <!-- Filter by Category -->
+            <select id="filterCategory" class="filter-select">
+              <option value="">All Categories</option>
+              <option value="Raw Materials">Raw Materials</option>
+              <option value="Logistics">Logistics</option>
+              <option value="Manufacturing">Manufacturing</option>
+              <option value="IT Services">IT Services</option>
+            </select>
+
+            <!-- Filter by Status -->
+            <select id="filterStatus" class="filter-select">
+              <option value="">All Statuses</option>
+              <option value="active">Active</option>
+              <option value="pending">Pending</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Vendor Table Layout Card -->
+        <div class="table-card">
+          <div class="table-wrapper">
+            <table class="data-table" id="vendorTable">
+              <thead>
+                <tr>
+                  <th>Vendor ID</th>
+                  <th>Vendor Name</th>
+                  <th>Company Name</th>
+                  <th>Email</th>
+                  <th>Phone Number</th>
+                  <th>GST Number</th>
+                  <th>Category</th>
+                  
+                  <th>Status</th>
+                  
+                </tr>
+              </thead>
+              <tbody id="vendorTableBody">
+
+                {% for vendor in vendors %}
+                <tr>
+                
+                    <td>{{ vendor.id }}</td>
+                
+                    <td>{{ vendor.user.first_name }} {{ vendor.user.last_name }}</td>
+                
+                    <td>{{ vendor.vendor_name }}</td>
+                  
+                    <td>{{ vendor.email }}</td>
+                
+                    <td>{{ vendor.phone_number }}</td>
+                
+                    <td>{{ vendor.gst_number }}</td>
+                
+                    <td>{{ vendor.category }}</td>
+                
+                    
+                
+                    <td>
+                        <span class="status-badge">
+                            {{ vendor.status }}
+                        </span>
+                    </td>
+                
+                    
+                
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="10">
+                        No Vendors Found
+                    </td>
+                </tr>
+                {% endfor %}
+                
+                </tbody>
+            </table>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Add Vendor Modal Dialog Box -->
+  <div class="modal-overlay" id="addVendorModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2 class="modal-title">Add Vendor Profile</h2>
+        <button class="modal-close-btn" id="closeModalBtn" aria-label="Close dialog">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <form id="addVendorForm">
+        <div class="modal-body">
+          <div class="modal-form-grid">
+            
+            <!-- Vendor Name -->
+            <div class="form-group">
+              <label for="vendorName">Vendor Contact Name</label>
+              <input type="text" id="vendorName" placeholder="e.g. John Doe" required>
+            </div>
+
+            <!-- Company Name -->
+            <div class="form-group">
+              <label for="vendorCompany">Company Name</label>
+              <input type="text" id="vendorCompany" placeholder="e.g. Acme Corp" required>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+              <label for="vendorEmail">Email Address</label>
+              <input type="email" id="vendorEmail" placeholder="e.g. sales@acme.com" required>
+            </div>
+
+            <!-- Phone Number -->
+            <div class="form-group">
+              <label for="vendorPhone">Phone Number</label>
+              <input type="tel" id="vendorPhone" placeholder="e.g. +1 (555) 019-2834" required>
+            </div>
+
+            <!-- GST Number -->
+            <div class="form-group">
+              <label for="vendorGst">GST Registration Number</label>
+              <input type="text" id="vendorGst" placeholder="e.g. 27AAAAA1111A1Z1" required>
+            </div>
+
+            <!-- Category -->
+            <div class="form-group">
+              <label for="vendorCategory">Vendor Category</label>
+              <select id="vendorCategory" required>
+                <option value="" disabled selected>Choose category</option>
+                <option value="Raw Materials">Raw Materials</option>
+                <option value="Logistics">Logistics</option>
+                <option value="Manufacturing">Manufacturing</option>
+                <option value="IT Services">IT Services</option>
+              </select>
+            </div>
+
+            <!-- Address (Full Width) -->
+            <div class="form-group full-width">
+              <label for="vendorAddress">Office Address</label>
+              <textarea id="vendorAddress" placeholder="e.g. 104 Main Street, Industrial Zone, NY" required></textarea>
+            </div>
+
+            <!-- Status -->
+            <div class="form-group full-width">
+              <label for="vendorStatus">Compliance Status</label>
+              <select id="vendorStatus" required>
+                <option value="active">Active</option>
+                <option value="pending">Pending Verification</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancelModalBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="saveVendorBtn">Save Vendor</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Alerts Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  {% endblock %}
+
+  {% block js %}
+  <script src="{% static 'js/vendors.js' %}"></script>
+  {% endblock %}
